@@ -2,6 +2,8 @@
 
 [Read this first.](https://circleci.com/docs/2.0/configuration-reference)
 
+See also [GrumPHP](grumphp.md)
+
 ## Getting started
 
 Copy the configuration file of a specific branch, such as [networq-php](https://github.com/networq/networq-php).
@@ -10,7 +12,7 @@ Copy the configuration file of a specific branch, such as [networq-php](https://
 
 ### New repo
 
-Use `.circleci/config.yml` and  `grumphp.yml` of [networq-php](https://github.com/networq/networq-php), change it a little to your needs. Change cached folder, configurate automatic deployment, etc.
+Use `doc/.circleci/config.yml` for CI installation. Change it a little to your needs. Change cached folder, configurate automatic deployment, etc.
 
 ### Add something to `grumphp.yml` in a repository
 
@@ -22,55 +24,7 @@ Use `.circleci/config.yml` and  `grumphp.yml` of [networq-php](https://github.co
 
 ## Explained..
 
-Below is an example file I used for [networq-php](https://github.com/networq/networq-php). Save this as `.circleci/config.yml` in your Project.
-
-```
-version: 2
-
-install_composer: &install_composer
-    run: |
-        cd /tmp
-        EXPECTED_SIGNATURE=$(curl -q https://composer.github.io/installer.sig)
-        php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-        ACTUAL_SIGNATURE=$(php -r "echo hash_file('SHA384', 'composer-setup.php');")
-        if [ "$EXPECTED_SIGNATURE" != "$ACTUAL_SIGNATURE" ]
-        then
-            >&2 echo 'ERROR: Invalid installer signature'
-            rm composer-setup.php
-            exit 1
-        fi
-        sudo php composer-setup.php --quiet --install-dir /usr/local/bin --filename composer
-        RESULT=$?
-        rm composer-setup.php
-        exit $RESULT
-
-jobs:
-  build:
-    docker:
-      - image: circleci/php:7.1.5-browsers
-
-    working_directory: ~/networq-php
-
-    steps:
-      - checkout
-
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "composer.json" }}
-          - v1-dependencies-
-
-      - run:
-        <<: *install_composer
-
-      - run: composer install -n --prefer-dist
-
-      - save_cache:
-          paths:
-            - ./vendor
-          key: v1-dependencies-{{ checksum "composer.json" }}
-
-      - run: ./vendor/bin/grumphp run
-```
+See `doc/.circleci/config.yml`, save this as `.circleci/config.yml` in your project.
 
 ### version:
 
@@ -138,80 +92,6 @@ Make sure you use custom checksums for different packagemanagers (see difference
 P.S.: read this: https://github.com/phpro/grumphp
 
 Build and test the thing. I use grumphp here, you can add things to run using [grumphp](https://github.com/phpro/grumphp). It is really cool.
-
-#### Using grumphp
-
-For example phpunit:
-
-```
-$ composer require --dev phpunit/phpunit ^7
-```
-
-Then add configuration to `grumphp.yml`, [See how to do that here](https://github.com/phpro/grumphp/blob/master/doc/tasks.md).
-
-##### phan/phan (example)
-
-Install it: `composer require --dev phan/phan`
-
-Documentation: https://github.com/phan/phan/wiki/Getting-Started#creating-a-config-file
-
-Add this config-file as `.phan/config.php`, add [phan config to grumphp.yml](https://github.com/phpro/grumphp/blob/master/doc/tasks/phan.md).
-
-##### phpstan/phpstan (example)
-
-Install it: `composer require --dev phpstan/phpstan`
-
-Documentation: https://github.com/phpstan/phpstan
-
-[Add config to grumphp.yml](https://github.com/phpro/grumphp/blob/master/doc/tasks/phpstan.md)
-
-##### phpcs (example)
-
-Install it: `composer require --dev squizlabs/php_codesniffer`
-
-Documentation: https://github.com/squizlabs/PHP_CodeSniffer
-
-[Add config to grumphp.yml](https://github.com/phpro/grumphp/blob/master/doc/tasks/phpcs.md)
-
-##### Tasks
-
-Useful tasks to look into:
-
-- [Composer](https://github.com/phpro/grumphp/blob/master/doc/tasks/composer.md)
-- [Git Blacklist](https://github.com/phpro/grumphp/blob/master/doc/tasks/git_blacklist.md)
-- [JsonLint](https://github.com/phpro/grumphp/blob/master/doc/tasks/jsonlint.md)
-- [phpcs](https://github.com/phpro/grumphp/blob/master/doc/tasks/phpcs.md)
-- [PhpCpd](https://github.com/phpro/grumphp/blob/master/doc/tasks/phpcpd.md)
-- [Phan](https://github.com/phpro/grumphp/blob/master/doc/tasks/phan.md)
-- [PHPLint](https://github.com/phpro/grumphp/blob/master/doc/tasks/phplint.md)
-- [PhpMd](https://github.com/phpro/grumphp/blob/master/doc/tasks/phpmd.md)
-- [PHPMND](https://github.com/phpro/grumphp/blob/master/doc/tasks/phpmnd.md)
-- [PHPStan](https://github.com/phpro/grumphp/blob/master/doc/tasks/phpstan.md)
-- [PHPUnit](https://github.com/phpro/grumphp/blob/master/doc/tasks/phpunit.md)
-- [PhpVersion](https://github.com/phpro/grumphp/blob/master/doc/tasks/phpversion.md)
-- [Security Checker](https://github.com/phpro/grumphp/blob/master/doc/tasks/securitychecker.md)
-- [XmlLint](https://github.com/phpro/grumphp/blob/master/doc/tasks/xmllint.md)
-- [YamlLint](https://github.com/phpro/grumphp/blob/master/doc/tasks/yamllint.md)
-
-See list here: https://github.com/phpro/grumphp/blob/master/doc/tasks.md
-
-#### Not using grumphp (please use grumphp)
-
-But you can add things seperately as well, for example [phpunit](https://phpunit.de/manual/6.5/en/installation.html):
-
-```
-$ composer require --dev phpunit/phpunit ^7
-```
-
-Then add to steps:
-
-```
-- run: ./vendor/bin/phpunit --configuration phpunit.xml tests
-```
-
-This works for phpcs and other packages as well. They will appear in `vendor/bin`.
-
-
 
 ## Cool stuff to look into:
 

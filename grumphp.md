@@ -78,7 +78,7 @@ See list here: https://github.com/phpro/grumphp/blob/master/doc/tasks.md
 
 #### Not using grumphp (please use grumphp)
 
-But you can add things seperately as well, for example [phpunit](https://phpunit.de/manual/6.5/en/installation.html):
+But you can add things separately as well, for example [phpunit](https://phpunit.de/manual/6.5/en/installation.html):
 
 ```
 $ composer require --dev phpunit/phpunit ^7

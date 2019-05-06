@@ -10,7 +10,7 @@ Copy the configuration file of a specific branch, such as [networq-php](https://
 
 ## Workflows
 
-### New repo
+### New repository
 
 Use `doc/.circleci/config.yml` for CI installation. Change it a little to your needs. Change cached folder, configurate automatic deployment, etc.
 
@@ -47,7 +47,7 @@ Follow: https://ropenscilabs.github.io/r-docker-tutorial/04-Dockerhub.html
 
 ### jobs/build/steps/cache
 
-To speed up, we retrieve caching and upload it after changing it. We use the checksum of `composer.json` (you can replace this whith `package.json` or `requirements.txt`, whatever the packagemanager of your platform). The checksum is being used to reduce the weight of constantly moving files (if you only use the last cache, then you don't have the cache of removed dependencies anymore).
+To speed up, we retrieve caching and upload it after changing it. We use the checksum of `composer.json` (you can replace this with `package.json` or `requirements.txt`, whatever the package manager of your platform). The checksum is being used to reduce the weight of constantly moving files (if you only use the last cache, then you don't have the cache of removed dependencies anymore).
 
 #### Multiple cached folders
 
@@ -85,7 +85,7 @@ jobs:
       ...
 ```
 
-Make sure you use custom checksums for different packagemanagers (see difference between `- v1-composer-{{ checksum "composer.json" }}` and `- v1-npm-{{ checksum "package.json" }}`)
+Make sure you use custom checksums for different package managers (see difference between `- v1-composer-{{ checksum "composer.json" }}` and `- v1-npm-{{ checksum "package.json" }}`)
 
 ### jobs/build/steps
 
@@ -96,7 +96,7 @@ Build and test the thing. I use grumphp here, you can add things to run using [g
 ## Cool stuff to look into:
 
 - [Deployment](https://circleci.com/docs/2.0/configuration-reference/#deploy)
-- [Triggers and crontabs](https://circleci.com/docs/2.0/configuration-reference/#triggers)
+- [Triggers and crontab](https://circleci.com/docs/2.0/configuration-reference/#triggers)
 - [grumphp](https://github.com/phpro/grumphp)
 - [phpunit](https://phpunit.de)
 - [Docker documentation for custom Dockerfiles](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)

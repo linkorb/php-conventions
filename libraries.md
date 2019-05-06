@@ -1,4 +1,4 @@
-## Prefered PHP libraries
+## Preferred PHP libraries
 
 Here's a list of basic libraries that we enjoy using.
 
@@ -9,7 +9,7 @@ To keep our dependency management simple, and prevent people from learning about
 * `PDO`: Database connectivity
 * `doctrine/dbal`: More advanced use-cases
 * `monolog/monolog`: Logging
-* `herald-project/client-php`: Transactional messages (email, sms, etc)
+* `herald-project/client-php`: Transactional messages (email, SMS, etc)
 * `linkorb/stored-client`: Image handling
 * `crodas/service-provider`: Configuring services
 * `symfony/routing`: Route definitions (implied through Silex)
